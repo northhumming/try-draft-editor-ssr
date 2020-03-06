@@ -1,18 +1,17 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 
-import { Container } from '@components/Container'
-import { MyEditor } from '@components/MyEditor'
-import { DarkModeSwitch } from '@components/DarkModeSwitch'
+const MyEditor = dynamic(() => import('@components/MyEditor'), {
+  ssr: false,
+})
 
 const Home = () => (
-  <Container>
-    <DarkModeSwitch />
-    <div css={{ minHeight: '100vh' }}>
-      <div css={{ width: '300px', margin: '0 auto' }}>
-        <MyEditor />
-      </div>
+  <div css={{ minHeight: '100vh' }}>
+    <div css={{ width: '600px', margin: '0 auto' }}>
+      <h1>Editor</h1>
+      <MyEditor />
     </div>
-  </Container>
+  </div>
 )
 
 export default Home
