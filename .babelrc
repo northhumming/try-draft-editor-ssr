@@ -1,0 +1,25 @@
+{
+  "presets": [
+    [
+      "next/babel",
+      {
+        "class-properties": {
+          "loose": true
+        }
+      }
+    ],
+    [
+      "@emotion/babel-preset-css-prop"
+    ]
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "@components": "./src/components",
+        }
+      }
+    ]
+  ]
+}
