@@ -1,14 +1,39 @@
 import React, { Component } from 'react'
-import { EditorState } from 'draft-js'
-import Editor from 'draft-js-plugins-editor'
+import { convertFromRaw, EditorState } from 'draft-js'
+
+import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createLinkifyPlugin from 'draft-js-linkify-plugin'
+import createToolbarPlugin from 'draft-js-static-toolbar-plugin'
+import createCounterPlugin from 'draft-js-counter-plugin'
+import createFocusPlugin from 'draft-js-focus-plugin'
+
+import createCustomImagePlugin from './createCustomImagePlugin'
+
+import initialState from './initialState'
 
 const linkifyPlugin = createLinkifyPlugin()
-const plugins = [linkifyPlugin]
+const staticToolbarPlugin = createToolbarPlugin()
+const counterPlugin = createCounterPlugin()
+const focusPlugin = createFocusPlugin()
+
+const { Toolbar } = staticToolbarPlugin
+const { CharCounter } = counterPlugin
+
+const decorator = composeDecorators(focusPlugin.decorator)
+
+const customImagePlugin = createCustomImagePlugin({ decorator })
+
+const plugins = [
+  staticToolbarPlugin,
+  linkifyPlugin,
+  counterPlugin,
+  customImagePlugin,
+  focusPlugin,
+]
 
 export default class SimpleMentionEditor extends Component {
   state = {
-    editorState: EditorState.createEmpty(),
+    editorState: EditorState.createWithContent(convertFromRaw(initialState)),
   }
 
   onChange = (editorState) => {
@@ -24,6 +49,7 @@ export default class SimpleMentionEditor extends Component {
   render() {
     return (
       <div onClick={this.focus}>
+        <Toolbar />
         <Editor
           editorState={this.state.editorState}
           onChange={this.onChange}
@@ -32,6 +58,9 @@ export default class SimpleMentionEditor extends Component {
             this.editor = element
           }}
         />
+        <div>
+          <CharCounter editorState={this.state.editorState} limit={200} /> / 200
+        </div>
       </div>
     )
   }
