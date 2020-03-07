@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { convertFromRaw, EditorState } from 'draft-js'
+import { convertToRaw, convertFromRaw, EditorState } from 'draft-js'
 
 import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createLinkifyPlugin from 'draft-js-linkify-plugin'
@@ -37,18 +37,29 @@ export default class SimpleMentionEditor extends Component {
   }
 
   onChange = (editorState) => {
+    const { onChange } = this.props
+
     this.setState({
       editorState,
     })
+
+    onChange(editorState)
   }
 
-  focus = () => {
-    this.editor.focus()
+  addImage = () => {
+    const newState = customImagePlugin.addImage(
+      this.state.editorState,
+      'https://i.picsum.photos/id/777/800/400.jpg',
+    )
+
+    this.setState({
+      editorState: newState,
+    })
   }
 
   render() {
     return (
-      <div onClick={this.focus}>
+      <div>
         <Toolbar />
         <Editor
           editorState={this.state.editorState}
@@ -60,6 +71,12 @@ export default class SimpleMentionEditor extends Component {
         />
         <div>
           <CharCounter editorState={this.state.editorState} limit={200} /> / 200
+        </div>
+        <div
+          css={{ border: '1px solid #222', cursor: 'pointer' }}
+          onClick={this.addImage}
+        >
+          Add
         </div>
       </div>
     )

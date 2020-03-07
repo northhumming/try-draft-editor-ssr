@@ -1,5 +1,7 @@
 import React from 'react'
 
+import addImage from './modifiers/addImage'
+
 const CustomImage = (props) => {
   const {
     block,
@@ -15,8 +17,9 @@ const CustomImage = (props) => {
     style,
     ...elementProps
   } = props
-  console.log(props)
+
   const isFocused = props.blockProps.isFocused
+  const { src } = contentState.getEntity(block.getEntityAt(0)).getData()
 
   return (
     <div
@@ -41,7 +44,7 @@ const CustomImage = (props) => {
           Delete
         </div>
       )}
-      <img src="https://i.picsum.photos/id/765/800/500.jpg" alt="" />
+      <img src={src} alt="" />
     </div>
   )
 }
@@ -57,7 +60,8 @@ const createCustomImagePlugin = (config = {}) => {
         const contentState = getEditorState().getCurrentContent()
         const entity = contentState.getEntity(block.getEntityAt(0))
         const type = entity.getType()
-        if (type === 'customImage') {
+
+        if (type === 'IMAGE') {
           return {
             component,
             editable: false,
@@ -67,6 +71,7 @@ const createCustomImagePlugin = (config = {}) => {
 
       return null
     },
+    addImage,
   }
 }
 

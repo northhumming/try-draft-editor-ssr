@@ -1,9 +1,20 @@
 const initialState = {
   entityMap: {
     '0': {
-      type: 'customImage',
+      type: 'IMAGE',
       mutability: 'IMMUTABLE',
-      data: {},
+      data: {
+        src: 'https://i.picsum.photos/id/766/800/400.jpg',
+        alt: 'test1',
+      },
+    },
+    '1': {
+      type: 'IMAGE',
+      mutability: 'IMMUTABLE',
+      data: {
+        src: 'https://i.picsum.photos/id/767/800/400.jpg',
+        alt: 'test3',
+      },
     },
   },
   blocks: [
@@ -40,6 +51,21 @@ const initialState = {
       depth: 0,
       inlineStyleRanges: [],
       entityRanges: [],
+      data: {},
+    },
+    {
+      key: 'sd3dz',
+      text: ' ',
+      type: 'atomic',
+      depth: 0,
+      inlineStyleRanges: [],
+      entityRanges: [
+        {
+          offset: 0,
+          length: 1,
+          key: 1,
+        },
+      ],
       data: {},
     },
   ],

@@ -37,6 +37,7 @@
     "eqeqeq": ["error", "always"],
     "space-before-function-paren": 0,
     "generator-star-spacing": 0,
+    "react/prop-types": 0,
     "import/named": 2,
     "import/namespace": 2,
     "import/default": 2,
