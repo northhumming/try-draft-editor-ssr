@@ -17,9 +17,20 @@ const CustomImage = (props) => {
     style,
     ...elementProps
   } = props
-
+  console.log(props)
   const isFocused = props.blockProps.isFocused
-  const { src } = contentState.getEntity(block.getEntityAt(0)).getData()
+  const { src, caption } = contentState
+    .getEntity(block.getEntityAt(0))
+    .getData()
+
+  const handleDrop = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const handleCaptionChange = (event) => {
+    event.stopPropagation()
+  }
 
   return (
     <div
@@ -27,6 +38,7 @@ const CustomImage = (props) => {
       css={{
         position: 'relative',
         border: `3px solid ${isFocused ? '#ffed51' : 'transparent'}`,
+        marginBottom: '15px',
       }}
       style={{ ...style }}
     >
@@ -44,29 +56,54 @@ const CustomImage = (props) => {
           Delete
         </div>
       )}
-      <img src={src} alt="" />
+      <div css={{ display: 'grid', justifyItems: 'center' }}>
+        <img src={src} alt="" />
+        <div>{caption}</div>
+      </div>
+      <div
+        css={{
+          padding: '10px',
+          backgroundColor: '#fff',
+          position: 'absolute',
+          top: '5px',
+          left: '5px',
+          zIndex: '23',
+        }}
+      >
+        <input type="text" onDrop={handleDrop} onChange={handleCaptionChange} />
+      </div>
     </div>
   )
 }
 
+const defaultTheme = {
+  image: null,
+}
+
 const createCustomImagePlugin = (config = {}) => {
-  const component = config.decorator
-    ? config.decorator(CustomImage)
-    : CustomImage
+  const theme = config.theme ? config.theme : defaultTheme
+  let Image = config.imageComponent || CustomImage
+  if (config.decorator) {
+    Image = config.decorator(Image)
+  }
+  const ThemedImage = (props) => <Image {...props} theme={theme} />
 
   return {
     blockRendererFn: (block, { getEditorState }) => {
       if (block.getType() === 'atomic') {
         const contentState = getEditorState().getCurrentContent()
-        const entity = contentState.getEntity(block.getEntityAt(0))
-        const type = entity.getType()
+        const entity = block.getEntityAt(0)
 
-        if (type === 'IMAGE') {
+        if (!entity) return null
+
+        const type = contentState.getEntity(entity).getType()
+        if (type === 'IMAGE' || type === 'image') {
           return {
-            component,
+            component: ThemedImage,
             editable: false,
           }
         }
+        return null
       }
 
       return null

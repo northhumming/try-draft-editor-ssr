@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { convertToRaw, convertFromRaw, EditorState } from 'draft-js'
+import { convertFromRaw, EditorState } from 'draft-js'
 
 import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createLinkifyPlugin from 'draft-js-linkify-plugin'
@@ -34,6 +34,7 @@ const plugins = [
 export default class SimpleMentionEditor extends Component {
   state = {
     editorState: EditorState.createWithContent(convertFromRaw(initialState)),
+    readOnly: false,
   }
 
   onChange = (editorState) => {
@@ -60,8 +61,19 @@ export default class SimpleMentionEditor extends Component {
   render() {
     return (
       <div>
+        <div
+          css={{ border: '1px solid #222', userSelect: 'none' }}
+          onClick={() => {
+            this.setState(({ readOnly }) => ({
+              readOnly: !readOnly,
+            }))
+          }}
+        >
+          {this.state.readOnly ? 'Disable readOnly' : 'Open readOnly'}
+        </div>
         <Toolbar />
         <Editor
+          readOnly={this.state.readOnly}
           editorState={this.state.editorState}
           onChange={this.onChange}
           plugins={plugins}

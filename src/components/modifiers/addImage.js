@@ -7,6 +7,7 @@ export default (editorState, url, extraData) => {
     'IMMUTABLE',
     { src: url, ...extraData },
   )
+
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
   const newEditorState = AtomicBlockUtils.insertAtomicBlock(
     editorState,

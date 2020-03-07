@@ -5,7 +5,8 @@ const initialState = {
       mutability: 'IMMUTABLE',
       data: {
         src: 'https://i.picsum.photos/id/766/800/400.jpg',
-        alt: 'test1',
+        alt: 'test 1',
+        caption: 'photos caption 1',
       },
     },
     '1': {
@@ -13,7 +14,8 @@ const initialState = {
       mutability: 'IMMUTABLE',
       data: {
         src: 'https://i.picsum.photos/id/767/800/400.jpg',
-        alt: 'test3',
+        alt: 'test 2',
+        caption: 'photos caption 2',
       },
     },
   },
@@ -66,6 +68,15 @@ const initialState = {
           key: 1,
         },
       ],
+      data: {},
+    },
+    {
+      key: 'e23a9',
+      text: 'zzzzzzzz',
+      type: 'unstyled',
+      depth: 0,
+      inlineStyleRanges: [],
+      entityRanges: [],
       data: {},
     },
   ],
