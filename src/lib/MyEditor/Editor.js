@@ -7,7 +7,7 @@ import createToolbarPlugin from 'draft-js-static-toolbar-plugin'
 import createCounterPlugin from 'draft-js-counter-plugin'
 import createFocusPlugin from 'draft-js-focus-plugin'
 
-import createCustomImagePlugin from './createCustomImagePlugin'
+import { createImagePlugin } from './plugins'
 
 import initialState from './initialState'
 
@@ -21,20 +21,19 @@ const { CharCounter } = counterPlugin
 
 const decorator = composeDecorators(focusPlugin.decorator)
 
-const customImagePlugin = createCustomImagePlugin({ decorator })
+const imagePlugin = createImagePlugin({ decorator })
 
 const plugins = [
   staticToolbarPlugin,
   linkifyPlugin,
   counterPlugin,
-  customImagePlugin,
+  imagePlugin,
   focusPlugin,
 ]
 
-export default class SimpleMentionEditor extends Component {
+class MyEditor extends Component {
   state = {
     editorState: EditorState.createWithContent(convertFromRaw(initialState)),
-    readOnly: false,
   }
 
   onChange = (editorState) => {
@@ -48,7 +47,7 @@ export default class SimpleMentionEditor extends Component {
   }
 
   addImage = () => {
-    const newState = customImagePlugin.addImage(
+    const newState = imagePlugin.addImage(
       this.state.editorState,
       'https://i.picsum.photos/id/777/800/400.jpg',
     )
@@ -83,3 +82,5 @@ export default class SimpleMentionEditor extends Component {
     )
   }
 }
+
+export default MyEditor

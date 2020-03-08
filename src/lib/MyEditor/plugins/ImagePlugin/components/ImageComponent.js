@@ -1,8 +1,6 @@
 import React from 'react'
 
-import addImage from './modifiers/addImage'
-
-const CustomImage = (props) => {
+const ImageComponent = (props) => {
   const {
     block,
     blockProps,
@@ -15,6 +13,7 @@ const CustomImage = (props) => {
     tree,
     contentState,
     style,
+    onClick,
     ...elementProps
   } = props
 
@@ -46,7 +45,7 @@ const CustomImage = (props) => {
   return (
     <div>
       <div
-        {...elementProps}
+        onClick={onClick}
         css={{
           position: 'relative',
           border: `3px solid ${isFocused ? '#ffed51' : 'transparent'}`,
@@ -99,47 +98,4 @@ const CustomImage = (props) => {
   )
 }
 
-const defaultTheme = {
-  image: null,
-}
-
-const createCustomImagePlugin = (config = {}) => {
-  const theme = config.theme ? config.theme : defaultTheme
-  let Image = config.imageComponent || CustomImage
-  if (config.decorator) {
-    Image = config.decorator(Image)
-  }
-  const ThemedImage = (props) => <Image {...props} theme={theme} />
-
-  return {
-    blockRendererFn: (block, methods) => {
-      const { getEditorState, getReadOnly, setReadOnly } = methods
-
-      if (block.getType() === 'atomic') {
-        const contentState = getEditorState().getCurrentContent()
-        const entity = block.getEntityAt(0)
-
-        if (!entity) return null
-
-        const type = contentState.getEntity(entity).getType()
-        if (type === 'IMAGE' || type === 'image') {
-          return {
-            component: ThemedImage,
-            editable: false,
-            props: {
-              setReadOnly,
-              getReadOnly,
-            },
-          }
-        }
-
-        return null
-      }
-
-      return null
-    },
-    addImage,
-  }
-}
-
-export default createCustomImagePlugin
+export default ImageComponent
