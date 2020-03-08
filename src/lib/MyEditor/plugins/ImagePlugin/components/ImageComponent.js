@@ -14,10 +14,9 @@ const ImageComponent = (props) => {
     contentState,
     style,
     onClick,
-    ...elementProps
   } = props
 
-  const { isFocused, setReadOnly } = blockProps
+  const { isFocused, setReadOnly, removeBlockHandler } = blockProps
 
   const { src, caption } = contentState
     .getEntity(block.getEntityAt(0))
@@ -55,7 +54,7 @@ const ImageComponent = (props) => {
       >
         {isFocused && (
           <div
-            onClick={() => console.log('delete')}
+            onClick={() => removeBlockHandler()}
             css={{
               padding: '10px',
               backgroundColor: '#fff',
@@ -83,6 +82,7 @@ const ImageComponent = (props) => {
         >
           <input
             type="text"
+            placeholder="caption text..."
             onDrop={handleDrop}
             onChange={handleCaptionChange}
             onBlur={onBlur}

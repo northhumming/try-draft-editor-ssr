@@ -16,12 +16,12 @@ const staticToolbarPlugin = createToolbarPlugin()
 const counterPlugin = createCounterPlugin()
 const focusPlugin = createFocusPlugin()
 
-const { Toolbar } = staticToolbarPlugin
-const { CharCounter } = counterPlugin
-
 const decorator = composeDecorators(focusPlugin.decorator)
 
 const imagePlugin = createImagePlugin({ decorator })
+
+const { Toolbar } = staticToolbarPlugin
+const { CharCounter } = counterPlugin
 
 const plugins = [
   staticToolbarPlugin,
@@ -39,11 +39,14 @@ class MyEditor extends Component {
   onChange = (editorState) => {
     const { onChange } = this.props
 
-    this.setState({
-      editorState,
-    })
-
-    onChange(editorState)
+    this.setState(
+      {
+        editorState,
+      },
+      () => {
+        onChange(editorState)
+      },
+    )
   }
 
   addImage = () => {

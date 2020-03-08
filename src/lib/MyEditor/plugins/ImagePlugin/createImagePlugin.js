@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { addImage } from './modifiers'
+import { addImage, removeBlock } from './modifiers'
 import { ImageComponent } from './components'
 
 const defaultTheme = {
@@ -19,7 +19,12 @@ const createCustomImagePlugin = (config = {}) => {
 
   return {
     blockRendererFn: (block, methods) => {
-      const { getEditorState, getReadOnly, setReadOnly } = methods
+      const {
+        setEditorState,
+        getEditorState,
+        getReadOnly,
+        setReadOnly,
+      } = methods
 
       if (block.getType() === 'atomic') {
         const contentState = getEditorState().getCurrentContent()
@@ -30,12 +35,24 @@ const createCustomImagePlugin = (config = {}) => {
         const type = contentState.getEntity(entity).getType()
 
         if (type === 'IMAGE' || type === 'image') {
+          const removeBlockHandler = () => {
+            const editorState = getEditorState()
+            const key = editorState.getSelection().getStartKey()
+            const newEditorState = removeBlock(editorState, key)
+
+            if (newEditorState !== editorState) {
+              setEditorState(newEditorState)
+              return 'handled'
+            }
+          }
+
           return {
             component: ThemedImage,
             editable: false,
             props: {
               setReadOnly,
               getReadOnly,
+              removeBlockHandler,
             },
           }
         }
