@@ -61,19 +61,8 @@ export default class SimpleMentionEditor extends Component {
   render() {
     return (
       <div>
-        <div
-          css={{ border: '1px solid #222', userSelect: 'none' }}
-          onClick={() => {
-            this.setState(({ readOnly }) => ({
-              readOnly: !readOnly,
-            }))
-          }}
-        >
-          {this.state.readOnly ? 'Disable readOnly' : 'Open readOnly'}
-        </div>
         <Toolbar />
         <Editor
-          readOnly={this.state.readOnly}
           editorState={this.state.editorState}
           onChange={this.onChange}
           plugins={plugins}

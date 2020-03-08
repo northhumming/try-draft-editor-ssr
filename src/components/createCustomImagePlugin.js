@@ -17,19 +17,19 @@ const CustomImage = (props) => {
     style,
     ...elementProps
   } = props
-  console.log(props)
-  const isFocused = props.blockProps.isFocused
+
+  const { isFocused, setReadOnly } = blockProps
+
   const { src, caption } = contentState
     .getEntity(block.getEntityAt(0))
     .getData()
 
-  const handleDrop = (event) => {
-    event.preventDefault()
-    event.stopPropagation()
+  const onBlur = () => {
+    setReadOnly(false)
   }
 
-  const handleCaptionChange = (event) => {
-    event.stopPropagation()
+  const onFocus = () => {
+    setReadOnly(true)
   }
 
   return (
@@ -70,7 +70,7 @@ const CustomImage = (props) => {
           zIndex: '23',
         }}
       >
-        <input type="text" onDrop={handleDrop} onChange={handleCaptionChange} />
+        <input type="text" onBlur={onBlur} onFocus={onFocus} />
       </div>
     </div>
   )
@@ -89,7 +89,9 @@ const createCustomImagePlugin = (config = {}) => {
   const ThemedImage = (props) => <Image {...props} theme={theme} />
 
   return {
-    blockRendererFn: (block, { getEditorState }) => {
+    blockRendererFn: (block, methods) => {
+      const { getEditorState, getReadOnly, setReadOnly } = methods
+
       if (block.getType() === 'atomic') {
         const contentState = getEditorState().getCurrentContent()
         const entity = block.getEntityAt(0)
@@ -101,8 +103,13 @@ const createCustomImagePlugin = (config = {}) => {
           return {
             component: ThemedImage,
             editable: false,
+            props: {
+              setReadOnly,
+              getReadOnly,
+            },
           }
         }
+
         return null
       }
 
