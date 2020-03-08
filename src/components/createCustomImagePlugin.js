@@ -24,53 +24,76 @@ const CustomImage = (props) => {
     .getEntity(block.getEntityAt(0))
     .getData()
 
+  const handleDrop = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const handleCaptionChange = (event) => {
+    event.stopPropagation()
+  }
+
   const onBlur = () => {
     setReadOnly(false)
   }
 
   const onFocus = () => {
     setReadOnly(true)
+    event.preventDefault()
+    event.stopPropagation()
   }
 
   return (
-    <div
-      {...elementProps}
-      css={{
-        position: 'relative',
-        border: `3px solid ${isFocused ? '#ffed51' : 'transparent'}`,
-        marginBottom: '15px',
-      }}
-      style={{ ...style }}
-    >
-      {isFocused && (
+    <div>
+      <div
+        {...elementProps}
+        css={{
+          position: 'relative',
+          border: `3px solid ${isFocused ? '#ffed51' : 'transparent'}`,
+          marginBottom: '15px',
+        }}
+        style={{ ...style }}
+      >
+        {isFocused && (
+          <div
+            onClick={() => console.log('delete')}
+            css={{
+              padding: '10px',
+              backgroundColor: '#fff',
+              position: 'absolute',
+              top: '5px',
+              right: '5px',
+            }}
+          >
+            Delete
+          </div>
+        )}
+        <div css={{ display: 'grid', justifyItems: 'center' }}>
+          <img src={src} alt="" />
+          <div>{caption}</div>
+        </div>
         <div
-          onClick={() => console.log('delete')}
           css={{
             padding: '10px',
             backgroundColor: '#fff',
             position: 'absolute',
             top: '5px',
-            right: '5px',
+            left: '5px',
+            zIndex: '23',
           }}
         >
-          Delete
+          <input
+            type="text"
+            onDrop={handleDrop}
+            onChange={handleCaptionChange}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            onClick={(event) => {
+              event.preventDefault()
+              event.stopPropagation()
+            }}
+          />
         </div>
-      )}
-      <div css={{ display: 'grid', justifyItems: 'center' }}>
-        <img src={src} alt="" />
-        <div>{caption}</div>
-      </div>
-      <div
-        css={{
-          padding: '10px',
-          backgroundColor: '#fff',
-          position: 'absolute',
-          top: '5px',
-          left: '5px',
-          zIndex: '23',
-        }}
-      >
-        <input type="text" onBlur={onBlur} onFocus={onFocus} />
       </div>
     </div>
   )
